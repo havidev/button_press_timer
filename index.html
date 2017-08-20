@@ -5,54 +5,181 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <html>
-	
     <head>
         <title>Raspberry Pi Temperature</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
-        <style>
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-table, td, th {
-    border: 1px solid black;
-    padding: 5px;
-}
-
-th {text-align: left;}
-
-//This file is on GitHub
-</style>
+		<link rel="stylesheet" type="text/css" href="mystyle.css">
+        
 <script>
     function loadTemp() {
-        
-        if (window.XMLHttpRequest) {
+	
+		var mySelected = document.getElementById("months").selectedIndex;
+		var myMonth = document.getElementById("months").options[mySelected].value;
+		var mySelectedDay = document.getElementById("days").selectedIndex;
+		var myDay = document.getElementById("days").options[mySelectedDay].value;
+		
+			
+		if(window.XMLHttpRequest) {
             // code for IE7+, Firefox, Chrome, Opera, Safari
             var xmlhttp = new XMLHttpRequest();
-        } else {
+			} 
+			else {
             // code for IE6, IE5
             var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
         }
         xmlhttp.onreadystatechange = function() {
-            if (this.readyState === 4 && this.status === 200) {
+			if (this.readyState === 4 && this.status === 200) {
                 document.getElementById("txtHint").innerHTML = this.responseText;
-            }
-        };
+			}
+        }
 		//Only was able to get php file to open when in the same directory folder as the html file.
-        xmlhttp.open("GET","getTemp.php",true);
+		//Post also works instead of "GET". 
+		
+        xmlhttp.open("GET","getTemp.php?myM="+myMonth+"&myD="+myDay,true);
         xmlhttp.send();
+
 }
+	function getDaysInMonth(){
+		var mySelected = document.getElementById("months").selectedIndex;
+		var myValue = document.getElementById("months").options[mySelected].text;
+		
+		var myDays = document.getElementById("days");
+		//var myLeng = myDays.length;
+		
+		var myText = "";
+		if(myValue == "February"){
+			while(myDays.length>28){
+				myDays.removeChild(myDays.lastChild);
+			}
+		}
+		if (myValue=="January" || myValue=="March"||myValue=="May"||myValue=="July"||myValue=="August"
+			||myValue=="October"||myValue=="December"){
+			if(myDays.length<31){
+				var i;
+				for(i = myDays.length+1;i <= 31; i++){
+					var myOption = document.createElement("OPTION");
+					var textnode = document.createTextNode(i);
+					myOption.appendChild(textnode);
+					myDays.appendChild(myOption);
+				}
+			}	
+		}
+		if(myValue=="April"||myValue=="June"||myValue=="September"||myValue=="November"){
+			if(myDays.length<30 || myDays.length>30){
+				while(myDays.length>30){
+				myDays.removeChild(myDays.lastChild);
+				}
+				var i;
+				for(i = myDays.length+1;i <= 30; i++){
+					var myOption = document.createElement("OPTION");
+					var textnode = document.createTextNode(i);
+					myOption.appendChild(textnode);
+					myDays.appendChild(myOption);
+				}
+			}
+		}
+		//Below was to test the function
+		//document.getElementById("demo").innerHTML = myDays.length;
+	}
+	function getDate(){
+		var currentDate = new Date();
+		var setMonth = currentDate.getMonth();
+		var setDay = currentDate.getDate();
+		document.getElementById("months").options[setMonth].selected = true;
+		document.getElementById("days").options[setDay-1].selected = true;
+	}
+	
+	function recentTemp(){
+		if(window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            var xmlhttp = new XMLHttpRequest();
+			} 
+			else {
+            // code for IE6, IE5
+            var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function() {
+			if (this.readyState === 4 && this.status === 200) {
+                document.getElementById("txtHint").innerHTML = this.responseText;
+			}
+        }
+		//Only was able to get php file to open when in the same directory folder as the html file.
+		//Post also works instead of "GET". 
+		
+        xmlhttp.open("GET","getNewTemp.php",true);
+        xmlhttp.send();
+	}
+	
 </script>
     </head>
     <body>
-        <div><h3>My Pi Temp</h3></div>
+        <div><h2>My Pi Temp</h2></div>
         
-        <button type="button" onclick="loadTemp()">Get Temp</button>
+		<p>Select a date for Temperature readings</p>
+		<select id="months" name="months" onchange = "getDaysInMonth()">
+			<option value="1">January</option>
+			<option value="2">February</option>
+			<option value="3">March</option>
+			<option value="4">April</option>
+			<option value="5">May</option>
+			<option value="6">June</option>
+			<option value="7">July</option>
+			<option value="8">August</option>
+			<option value="9">September</option>
+			<option value="10">October</option>
+			<option value="11">November</option>
+			<option value="12">December</option>
+		</select>
+		
+		<select id="days">
+			<option value=1>1</option>
+			<option value=2>2</option>
+			<option value=3>3</option>
+			<option value=4>4</option>
+			<option value=5>5</option>
+			<option value=6>6</option>
+			<option value=7>7</option>
+			<option value=8>8</option>
+			<option value=9>9</option>
+			<option value=10>10</option>
+			<option value=11>11</option>
+			<option value=12>12</option>
+			<option value=13>13</option>
+			<option value=14>14</option>
+			<option value=15>15</option>
+			<option value=16>16</option>
+			<option value=17>17</option>
+			<option value=18>18</option>
+			<option value=19>19</option>
+			<option value=20>20</option>
+			<option value=21>21</option>
+			<option value=22>22</option>
+			<option value=23>23</option>
+			<option value=24>24</option>
+			<option value=25>25</option>
+			<option value=26>26</option>
+			<option value=27>27</option>
+			<option value=28>28</option>
+			<option value=29>29</option>
+			<option value=30>30</option>
+			<option value=31>31</option>
+		</select>
+		<button type="button" onclick="getDate()">Today's Date</button>
+		
+		
+		<button type="button" onclick="loadTemp()">Get Temp</button>
         <br><br>
+		<button type="button" onclick="recentTemp()">Get most recent temp</button>
+		
+		<br><br>
+		
+		<p id ="demo"></p>
     
         <div id="txtHint"><b>Data will be listed here...</b></div>
+		
+		
+		
         
     </body>
 </html>
